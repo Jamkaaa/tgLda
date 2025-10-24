@@ -1,0 +1,110 @@
+<%- include('include/header') %>
+
+<div class="container py-md-5 container--narrow">
+  <%- include('include/flash') %>
+
+  <div class="create-event-wrapper">
+    <div class="event-header">
+      <i class="fas fa-edit event-header-icon"></i>
+      <h2>Үйл явдал засах</h2>
+      <p class="text-muted">Үйл явдлын мэдээллийг шинэчлэх</p>
+    </div>
+
+    <form action="/event/<%= event._id %>/edit" method="POST" class="event-form">
+      <div class="form-group">
+        <label for="event-name" class="event-label">
+          <i class="fas fa-tag"></i> Үйл явдлын нэр
+        </label>
+        <input
+          required
+          name="name"
+          id="event-name"
+          class="form-control form-control-lg event-input"
+          type="text"
+          placeholder="Үйл явдлын нэр"
+          autocomplete="off"
+          value="<%= event.name %>"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="event-location" class="event-label">
+          <i class="fas fa-map-marker-alt"></i> Хаана болох вэ?
+        </label>
+        <input
+          required
+          name="location"
+          id="event-location"
+          class="form-control form-control-lg event-input"
+          type="text"
+          placeholder="Байршил"
+          autocomplete="off"
+          value="<%= event.location %>"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="event-description" class="event-label">
+          <i class="fas fa-align-left"></i> Юу хийх вэ?
+        </label>
+        <textarea
+          required
+          name="description"
+          id="event-description"
+          class="form-control event-textarea"
+          placeholder="Үйл явдлын дэлгэрэнгүй мэдээлэл..."
+        ><%= event.description %></textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="event-capacity" class="event-label">
+              <i class="fas fa-users"></i> Хэдэн хүн?
+            </label>
+            <input
+              required
+              name="capacity"
+              id="event-capacity"
+              class="form-control form-control-lg event-input"
+              type="number"
+              min="<%= event.participants.length %>"
+              max="1000"
+              placeholder="Хүмүүсийн тоо"
+              value="<%= event.capacity %>"
+            />
+            <small class="form-text text-muted">
+              Одоогийн оролцогчид: <%= event.participants.length %>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="event-date" class="event-label">
+              <i class="fas fa-clock"></i> Хэзээ?
+            </label>
+            <input
+              required
+              name="eventDate"
+              id="event-date"
+              class="form-control form-control-lg event-input"
+              type="datetime-local"
+              value="<%= new Date(event.eventDate).toISOString().slice(0, 16) %>"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-lg btn-primary event-submit-btn">
+          <i class="fas fa-save"></i> Хадгалах
+        </button>
+        <a href="/event/<%= event._id %>" class="btn btn-lg btn-secondary">
+          <i class="fas fa-times"></i> Цуцлах
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('include/footer') %>

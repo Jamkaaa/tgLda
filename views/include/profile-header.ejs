@@ -1,0 +1,87 @@
+<h2>
+  <img
+    class="avatar-small"
+    src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128"
+  />
+  <%= profileUsername %> 
+  
+  <% if( user && user.username === profileUsername ) { %>
+    <!-- Edit Profile Button (Own Profile) -->
+    <a href="/edit-profile" class="btn btn-warning btn-sm ml-2">
+      <i class="fas fa-edit"></i> Профайл засах
+    </a>
+  <% } %>
+  
+  <% if( user && user.username !== profileUsername ) { %>
+    <!-- Friend Button -->
+    <% if( areFriends ) { %>
+      <span class="badge badge-success ml-2">
+        <i class="fas fa-check-circle"></i> Найз
+      </span>
+      <button class="btn btn-success btn-sm ml-2 start-chat-btn" data-username="<%= profileUsername %>" data-userid="<%= profileUserId %>">
+        <i class="fas fa-comment"></i> Чат
+      </button>
+    <% } else { %>
+      <form
+        class="ml-2 d-inline"
+        action="/friend/add/<%= profileUserId %>/<%= profileUsername %>"
+        method="POST"
+      >
+        <button class="btn btn-warning btn-sm">
+          <i class="fas fa-user-plus"></i> Найз нэмэх
+        </button>
+      </form>
+    <% } %>
+    
+    <!-- Follow Button -->
+    <% if( isFollowing ) { %>
+    <form
+      class="ml-2 d-inline"
+      action="/unfollow/<%= profileUsername %>"
+      method="POST"
+    >
+      <button class="btn btn-danger btn-sm">
+        Unfollow <i class="fas fa-user-times"></i>
+      </button>
+    </form>
+    <% } else { %>
+    <form
+      class="ml-2 d-inline"
+      action="/follow/<%= profileUsername %>"
+      method="POST"
+    >
+      <button class="btn btn-primary btn-sm">
+        Follow <i class="fas fa-user-plus"></i>
+      </button>
+    </form>
+    <% } %>
+  <% } %>
+</h2>
+
+<div class="profile-nav-modern mb-4">
+  <a href="/profile/<%= profileUsername %>" class="profile-nav-modern-btn<% if (currentPage == 'events') { %> active<% } %>">
+    <i class="fas fa-calendar-alt"></i>
+    <span>Events</span>
+    <span class="profile-nav-count"><%= eventCount %></span>
+  </a>
+  <a href="/profile/<%= profileUsername %>/joined-events" class="profile-nav-modern-btn<% if (currentPage == 'joined-events') { %> active<% } %>">
+    <i class="fas fa-ticket-alt"></i>
+    <span>Joined</span>
+    <span class="profile-nav-count"><%= joinedEventCount %></span>
+  </a>
+  <a href="/profile/<%= profileUsername %>/friends" class="profile-nav-modern-btn<% if (currentPage == 'friends') { %> active<% } %>">
+    <i class="fas fa-user-friends"></i>
+    <span>Friends</span>
+    <span class="profile-nav-count"><%= friendCount %></span>
+  </a>
+  <a href="/profile/<%= profileUsername %>/followers" class="profile-nav-modern-btn<% if (currentPage == 'followers') { %> active<% } %>">
+    <i class="fas fa-users"></i>
+    <span>Followers</span>
+    <span class="profile-nav-count"><%= followerCount %></span>
+  </a>
+  <a href="/profile/<%= profileUsername %>/following" class="profile-nav-modern-btn<% if (currentPage == 'following') { %> active<% } %>">
+    <i class="fas fa-heart"></i>
+    <span>Following</span>
+    <span class="profile-nav-count"><%= followingCount %></span>
+  </a>
+</div>

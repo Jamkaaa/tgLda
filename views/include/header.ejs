@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>TGLDA - Connect & Share</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"
+      integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+
+  <body>
+    <header class="header-bar mb-3" ;>
+      <div
+        class="container d-flex flex-column flex-md-row align-items-center p-3"
+      >
+        <h4 class="my-0 mr-md-auto font-weight-normal">
+          <a href="/" class="text-white logo-text">TGLDA</a>
+        </h4>
+        <% if (user) { %>
+
+        <div class="flex-row my-3 my-md-0">
+          <a
+            href="#"
+            class="text-white mr-2 header-search-icon"
+            title="Search"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            ><i class="fas fa-search"></i
+          ></a>
+          
+          <!-- Chat Dropdown -->
+          <div class="dropdown d-inline mr-2">
+            <span
+              class="text-white header-chat-icon"
+              id="chatDropdown"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              style="cursor: pointer; position: relative;"
+              title="Чат"
+            >
+              <i class="fas fa-comment"></i>
+              <span class="chat-badge" id="chatBadge" style="display: none;">0</span>
+            </span>
+            <div class="dropdown-menu dropdown-menu-right chat-dropdown" aria-labelledby="chatDropdown" style="min-width: 320px; max-height: 450px; overflow-y: auto;">
+              <h6 class="dropdown-header">
+                <i class="fas fa-comment-dots"></i> Чатууд
+              </h6>
+              <div id="chatList">
+                <p class="dropdown-item text-muted text-center">Найз нараа харна уу...</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Notification Bell -->
+          <div class="dropdown d-inline mr-2">
+            <span
+              class="text-white notification-bell"
+              id="notificationDropdown"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              style="cursor: pointer; position: relative;"
+              title="Мэдэгдэл"
+            >
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            </span>
+            <div class="dropdown-menu dropdown-menu-right notification-dropdown" aria-labelledby="notificationDropdown" style="min-width: 350px; max-height: 400px; overflow-y: auto;">
+              <h6 class="dropdown-header">Мэдэгдэл</h6>
+              <div id="notificationList">
+                <p class="dropdown-item text-muted">Мэдэгдэл байхгүй байна</p>
+              </div>
+            </div>
+          </div>
+          
+          <a href="/profile/<%= user.username %>" class="mr-2"
+            ><img
+              title="My Profile"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              style="width: 32px; height: 32px; border-radius: 16px"
+              src="<%= user.avatar ? user.avatar : 'https://gravatar.com/avatar/f64fc44c03a8a7eb1d52502950879659?s=128' %>"
+          /></a>
+          <a class="btn btn-sm btn-info mr-2" href="/events"
+            ><i class="fas fa-calendar-alt"></i> Events</a
+          >
+          <a class="btn btn-sm btn-success mr-2" href="/create-event"
+            ><i class="fas fa-plus-circle"></i> Create Event</a
+          >
+          <form action="/logout" method="POST" class="d-inline">
+            <button class="btn btn-sm btn-secondary">Sign Out</button>
+          </form>
+        </div>
+
+        <% } else { %>
+
+        <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
+          <div class="row align-items-center">
+            <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+              <input
+                name="username"
+                class="form-control form-control-sm input-dark"
+                type="text"
+                placeholder="Username"
+                autocomplete="off"
+              />
+            </div>
+            <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+              <input
+                name="password"
+                class="form-control form-control-sm input-dark"
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <div class="col-md-auto">
+              <button class="btn btn-primary btn-sm">Sign In</button>
+            </div>
+          </div>
+        </form>
+
+        <% } %>
+      </div>
+    </header>
+  </body>
+</html>

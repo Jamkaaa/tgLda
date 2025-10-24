@@ -1,0 +1,120 @@
+<%- include('include/header') %>
+
+<div class="container py-md-5">
+  <%- include('include/flash') %>
+
+  <div class="edit-profile-container">
+    <div class="edit-profile-header">
+      <h2><i class="fas fa-user-edit"></i> Профайл засах</h2>
+      <p class="text-muted">Өөрийн мэдээллээ шинэчлэх</p>
+    </div>
+
+
+    <form action="/edit-profile" method="POST" enctype="multipart/form-data" class="edit-profile-form">
+      <!-- Profile Picture Section -->
+      <div class="profile-picture-section">
+        <div class="current-avatar">
+          <img id="avatarPreview" src="<%= user.avatar ? user.avatar : 'https://gravatar.com/avatar/f64fc44c03a8a7eb1d52502950879659?s=200' %>" alt="Profile Picture" class="preview-image">
+          <div class="avatar-overlay">
+            <i class="fas fa-camera"></i>
+          </div>
+        </div>
+        <div class="avatar-upload">
+          <label for="avatarInput" class="upload-label">
+            <i class="fas fa-upload"></i> Зураг сонгох
+          </label>
+          <input type="file" id="avatarInput" name="avatar" accept="image/*" class="d-none">
+          <small class="form-text text-muted">
+            JPG, PNG, GIF форматтай зураг. Хамгийн ихдээ 5MB.
+          </small>
+        </div>
+      </div>
+
+      <!-- Bio Section -->
+      <div class="form-group">
+        <label for="bio"><i class="fas fa-info-circle"></i> Өөрийн тухай</label>
+        <textarea 
+          class="form-control" 
+          id="bio" 
+          name="bio" 
+          rows="4" 
+          placeholder="Өөрийн тухай богино мэдээлэл бичнэ үү..."
+          maxlength="500"
+        ><%= user.bio ? user.bio : '' %></textarea>
+        <small class="form-text text-muted">
+          <span id="bioCount"><%= user.bio ? user.bio.length : 0 %></span>/500 тэмдэгт
+        </small>
+      </div>
+
+      <!-- Location Section -->
+      <div class="form-group">
+        <label for="location"><i class="fas fa-map-marker-alt"></i> Байршил</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="location" 
+          name="location" 
+          placeholder="Улаанбаатар, Монгол"
+          maxlength="100"
+          value="<%= user.location ? user.location : '' %>"
+        >
+      </div>
+
+      <!-- Website Section -->
+      <div class="form-group">
+        <label for="website"><i class="fas fa-link"></i> Вэбсайт</label>
+        <input 
+          type="url" 
+          class="form-control" 
+          id="website" 
+          name="website" 
+          placeholder="https://example.com"
+          value="<%= user.website ? user.website : '' %>"
+        >
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i class="fas fa-save"></i> Хадгалах
+        </button>
+        <a href="/profile/<%= user.username %>" class="btn btn-secondary btn-lg">
+          <i class="fas fa-times"></i> Цуцлах
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  // Image preview
+  const avatarInput = document.getElementById('avatarInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+
+  avatarInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        avatarPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Character counter for bio
+  const bioTextarea = document.getElementById('bio');
+  const bioCount = document.getElementById('bioCount');
+
+  bioTextarea.addEventListener('input', function() {
+    bioCount.textContent = this.value.length;
+  });
+
+  // Trigger file input when clicking on avatar
+  document.querySelector('.current-avatar').addEventListener('click', function() {
+    avatarInput.click();
+  });
+</script>
+
+<%- include('include/footer') %>

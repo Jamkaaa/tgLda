@@ -1,0 +1,170 @@
+<footer class="border-top text-center small text-muted py-3">
+    <p class="m-0">Copyright &copy; 2025 <a href="/" class="text-muted font-weight-bold">TGLDA</a>. All rights reserved.</p>
+  </footer>
+
+  <% if(user) { %>
+    <div id="chat-wrapper" class="chat-wrapper shadow border-top border-left border-right"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <% } %>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script>$('[data-toggle="tooltip"]').tooltip()</script>
+  
+  <% if(user) { %>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // Notification system
+    function loadNotifications() {
+      axios.get('/api/notifications')
+        .then(response => {
+          if (response.data.success) {
+            const notifications = response.data.notifications;
+            const count = response.data.count;
+            
+            // Update badge
+            const badge = document.getElementById('notificationBadge');
+            if (count > 0) {
+              badge.textContent = count > 9 ? '9+' : count;
+              badge.style.display = 'inline-block';
+            } else {
+              badge.style.display = 'none';
+            }
+            
+            // Update notification list
+            const notificationList = document.getElementById('notificationList');
+            if (notifications.length === 0) {
+              notificationList.innerHTML = '<p class="dropdown-item text-muted">Мэдэгдэл байхгүй байна</p>';
+            } else {
+              notificationList.innerHTML = notifications.map(notif => {
+                if (notif.type === 'friend_request') {
+                  return `
+                    <div class="dropdown-item notification-item">
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-user-plus text-primary mr-2"></i>
+                        <div class="flex-grow-1">
+                          <p class="mb-1 small"><strong>${notif.username}</strong> таньд найзын хүсэлт илгээсэн байна</p>
+                          <div class="btn-group btn-group-sm">
+                            <form action="/friend/accept/${notif.requestId}" method="POST" class="d-inline">
+                              <button class="btn btn-success btn-sm">Зөвшөөрөх</button>
+                            </form>
+                            <form action="/friend/reject/${notif.requestId}" method="POST" class="d-inline ml-1">
+                              <button class="btn btn-danger btn-sm">Татгалзах</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                } else if (notif.type === 'event_full') {
+                  return `
+                    <div class="dropdown-item notification-item">
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-calendar-check text-success mr-2"></i>
+                        <div class="flex-grow-1">
+                          <p class="mb-0 small"><strong>${notif.eventName}</strong> арга хэмжээ дүүрсэн байна</p>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }
+              }).join('');
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Failed to load notifications:', error);
+        });
+    }
+    
+    // Load notifications on page load
+    loadNotifications();
+    
+    // Refresh notifications every 30 seconds
+    setInterval(loadNotifications, 30000);
+    
+    // Load when dropdown is opened
+    document.getElementById('notificationDropdown').addEventListener('click', loadNotifications);
+
+    // Chat dropdown system
+    function loadChats() {
+      axios.get('/api/chats')
+        .then(response => {
+          if (response.data.success) {
+            const friends = response.data.friends;
+            
+            // Update chat list
+            const chatList = document.getElementById('chatList');
+            if (friends.length === 0) {
+              chatList.innerHTML = '<p class="dropdown-item text-muted text-center">Найз байхгүй байна</p>';
+            } else {
+              chatList.innerHTML = friends.map(friend => {
+                const isOnline = friend.isOnline;
+                const statusBadge = isOnline 
+                  ? '<span class="badge badge-success badge-pill online-badge"><i class="fas fa-circle"></i> Online</span>'
+                  : '<span class="badge badge-secondary badge-pill offline-badge"><i class="fas fa-circle"></i> Offline</span>';
+                
+                return `
+                  <div class="dropdown-item chat-contact-item start-chat-btn" 
+                       data-username="${friend.username}" 
+                       data-userid="${friend.userId}"
+                       style="cursor: pointer;">
+                    <div class="d-flex align-items-center">
+                      <div style="position: relative;">
+                        <img src="${friend.avatar}" 
+                             class="rounded-circle mr-2" 
+                             style="width: 40px; height: 40px; object-fit: cover;"
+                             alt="${friend.username}">
+                        <span class="status-dot ${isOnline ? 'status-dot-online' : 'status-dot-offline'}"></span>
+                      </div>
+                      <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <strong class="chat-contact-name">${friend.username}</strong>
+                          ${statusBadge}
+                        </div>
+                        <small class="text-muted">${isOnline ? 'Чат эхлүүлэхийн тулд дарна уу' : 'Одоогоор салсан байна'}</small>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Failed to load chats:', error);
+          document.getElementById('chatList').innerHTML = 
+            '<p class="dropdown-item text-danger text-center">Алдаа гарлаа</p>';
+        });
+    }
+    
+    // Load chats on page load
+    loadChats();
+    
+    // Load when dropdown is opened
+    document.getElementById('chatDropdown').addEventListener('click', loadChats);
+    
+    // Refresh chats every 10 seconds (faster for online status updates)
+    setInterval(loadChats, 10000);
+    
+    // Real-time status updates via Socket.io
+    if (typeof io !== 'undefined' && window.socket) {
+      // Listen for users coming online
+      window.socket.on('userOnline', (data) => {
+        console.log('🟢', data.username, 'онлайн боллоо');
+        loadChats(); // Refresh chat list
+      });
+      
+      // Listen for users going offline
+      window.socket.on('userOffline', (data) => {
+        console.log('⚫', data.username, 'офлайн боллоо');
+        loadChats(); // Refresh chat list
+      });
+    }
+  </script>
+  <% } %>
+  
+  <script src="/main-bundled.js"></script>
+</body>
+</html>

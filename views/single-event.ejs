@@ -1,0 +1,190 @@
+<%- include('include/header') %>
+
+<div class="container py-md-5 container--narrow">
+  <%- include('include/flash') %>
+
+  <div class="single-event-wrapper">
+    <!-- Event Header -->
+    <div class="single-event-header">
+      <div class="event-status-large <%= event.isFull ? 'status-full' : 'status-open' %>">
+        <% if (event.isFull) { %>
+          <i class="fas fa-lock"></i> ДҮҮРСЭН
+        <% } else { %>
+          <i class="fas fa-door-open"></i> НЭЭЛТТЭЙ
+        <% } %>
+      </div>
+      <h1 class="single-event-title">
+        <i class="fas fa-calendar-check"></i> <%= event.name %>
+      </h1>
+      <p class="single-event-meta">
+        Үүсгэсэн: <strong><a href="/profile/<%= event.author.username %>"><%= event.author.username %></a></strong> 
+        · <%= event.createdDate.toLocaleDateString() %>
+      </p>
+    </div>
+
+    <!-- Event Details Card -->
+    <div class="event-details-card">
+      <div class="event-detail-row">
+        <div class="event-detail-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="event-detail-content">
+          <h4>Байршил</h4>
+          <p><%= event.location %></p>
+        </div>
+      </div>
+
+      <div class="event-detail-row">
+        <div class="event-detail-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="event-detail-content">
+          <h4>Огноо & Цаг</h4>
+          <p><%= new Date(event.eventDate).toLocaleString('en-US', { 
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          }) %></p>
+        </div>
+      </div>
+
+      <div class="event-detail-row">
+        <div class="event-detail-icon">
+          <i class="fas fa-align-left"></i>
+        </div>
+        <div class="event-detail-content">
+          <h4>Тайлбар</h4>
+          <p><%= event.description %></p>
+        </div>
+      </div>
+
+      <div class="event-detail-row">
+        <div class="event-detail-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="event-detail-content">
+          <h4>Хүмүүсийн тоо</h4>
+          <div class="capacity-display">
+            <div class="capacity-numbers">
+              <span class="capacity-current"><%= event.participants.length %></span>
+              <span class="capacity-separator">/</span>
+              <span class="capacity-total"><%= event.capacity %></span>
+            </div>
+            <div class="capacity-progress">
+              <div class="capacity-progress-bar" style="width: <%= (event.participants.length / event.capacity) * 100 %>%"></div>
+            </div>
+            <p class="capacity-text">
+              <% if (event.availableSpots > 0) { %>
+                <i class="fas fa-check-circle text-success"></i> <strong><%= event.availableSpots %></strong> суудал үлдсэн
+              <% } else { %>
+                <i class="fas fa-exclamation-circle text-danger"></i> Бүх суудал дүүрсэн
+              <% } %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="event-actions">
+      <% if (event.isVisitorOwner) { %>
+        <a href="/event/<%= event._id %>/edit" class="btn btn-warning btn-lg">
+          <i class="fas fa-edit"></i> Засах
+        </a>
+        <form action="/event/<%= event._id %>/delete" method="POST" class="d-inline">
+          <button class="btn btn-danger btn-lg delete-event-button">
+            <i class="fas fa-trash"></i> Устгах
+          </button>
+        </form>
+      <% } else { %>
+        <% if (!event.isFull && !event.hasJoined) { %>
+          <form action="/event/<%= event._id %>/join" method="POST" class="event-join-form">
+            <button class="btn btn-success btn-lg btn-block event-join-large">
+              <i class="fas fa-user-plus"></i> Үйл явдалд нэгдэх
+            </button>
+          </form>
+        <% } else if (event.hasJoined) { %>
+          <div class="alert alert-info">
+            <i class="fas fa-check-circle"></i> Та энэ үйл явдалд нэгдсэн байна!
+          </div>
+          <form action="/event/<%= event._id %>/leave" method="POST">
+            <button class="btn btn-outline-danger btn-lg">
+              <i class="fas fa-sign-out-alt"></i> Гарах
+            </button>
+          </form>
+        <% } else if (event.isFull) { %>
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> Энэ үйл явдал дүүрсэн байна
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+
+    <!-- Participants Section -->
+    <% if (participants && participants.length > 0) { %>
+    <div class="participants-section">
+      <h3 class="participants-title">
+        <i class="fas fa-users"></i> Оролцогчид (<%= participants.length %>)
+      </h3>
+      <div class="participants-list">
+        <% participants.forEach(function(participant) { %>
+          <div class="participant-card">
+            <img class="participant-avatar-img" src="<%= participant.avatar %>" alt="<%= participant.username %>">
+            <div class="participant-info">
+              <a href="/profile/<%= participant.username %>" class="participant-name">
+                <strong><%= participant.username %></strong>
+              </a>
+              <% if (typeof user !== 'undefined' && user && user.username !== participant.username) { %>
+                <button class="btn btn-sm btn-info chat-participant-btn" data-username="<%= participant.username %>">
+                  <i class="fas fa-comment"></i> Chat
+                </button>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- Event Full Notification -->
+<div id="event-full-notification" class="event-notification">
+  <div class="event-notification-content">
+    <i class="fas fa-bell"></i>
+    <span id="notification-message"></span>
+  </div>
+</div>
+
+<script>
+  // Delete confirmation
+  document.querySelectorAll('.delete-event-button').forEach(button => {
+    button.addEventListener('click', function(e) {
+      if (!confirm('Та энэ үйл явдлыг устгахдаа итгэлтэй байна уу?')) {
+        e.preventDefault();
+      }
+    });
+  });
+
+  // Socket.io notification for event full
+  <% if (typeof user !== 'undefined' && user) { %>
+  const socket = io();
+  socket.on('eventFull', (data) => {
+    if (data.eventId === '<%= event._id %>') {
+      const notification = document.getElementById('event-full-notification');
+      const message = document.getElementById('notification-message');
+      message.textContent = data.message;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+    }
+  });
+  <% } %>
+</script>
+
+<%- include('include/footer') %>

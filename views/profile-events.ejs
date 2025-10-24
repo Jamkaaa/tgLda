@@ -1,0 +1,68 @@
+<%- include('include/header') %>
+
+<div class="container py-md-5 container--narrow">
+  <%- include('include/flash') %> 
+  <%- include('include/profile-header') %>
+
+  <% if (events && events.length) { %>
+  <div class="profile-events-grid">
+    <% events.forEach(function(event) { %>
+    <div class="profile-event-card">
+      <div class="profile-event-status">
+        <span class="badge <%= event.isFull ? 'badge-danger' : 'badge-success' %>">
+          <%= event.isFull ? 'Дүүрсэн' : 'Нээлттэй' %>
+        </span>
+        <span class="badge badge-secondary">
+          <i class="fas fa-users"></i> <%= event.participants.length %>/<%= event.capacity %>
+        </span>
+      </div>
+      
+      <h4 class="profile-event-title">
+        <i class="fas fa-calendar-check"></i> <%= event.name %>
+      </h4>
+      
+      <p class="profile-event-info">
+        <i class="fas fa-map-marker-alt"></i> <%= event.location %>
+      </p>
+      
+      <p class="profile-event-info">
+        <i class="fas fa-clock"></i> <%= new Date(event.eventDate).toLocaleDateString() %>
+      </p>
+      
+      <div class="profile-event-actions">
+        <a href="/event/<%= event._id %>" class="btn btn-sm btn-primary">
+          <i class="fas fa-eye"></i> Дэлгэрэнгүй
+        </a>
+        
+        <% if (event.isVisitorOwner) { %>
+          <a href="/event/<%= event._id %>/edit" class="btn btn-sm btn-warning">
+            <i class="fas fa-edit"></i> Засах
+          </a>
+        <% } else if (!event.isFull && !event.hasJoined) { %>
+          <form action="/event/<%= event._id %>/join" method="POST" class="d-inline">
+            <button class="btn btn-sm btn-success">
+              <i class="fas fa-user-plus"></i> Нэгдэх
+            </button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <div class="text-center py-5">
+    <i class="fas fa-calendar-times" style="font-size: 4rem; color: #cbd5e0;"></i>
+    <h3 class="mt-3">Үйл явдал байхгүй байна</h3>
+    <% if (typeof user !== 'undefined' && user && user.username === profileUsername) { %>
+      <p class="text-muted">Та одоогоор ямар ч үйл явдал үүсгээгүй байна.</p>
+      <a href="/create-event" class="btn btn-success btn-lg mt-3">
+        <i class="fas fa-plus-circle"></i> Үйл явдал үүсгэх
+      </a>
+    <% } else { %>
+      <p class="text-muted"><%= profileUsername %> одоогоор үйл явдал үүсгээгүй байна.</p>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<%- include('include/footer') %>

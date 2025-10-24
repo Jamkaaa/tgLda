@@ -1,0 +1,98 @@
+<%- include('include/header') %>
+
+<div class="container py-md-5 container--narrow">
+  <%- include('include/flash') %>
+
+  <div class="create-event-wrapper">
+    <div class="event-header">
+      <i class="fas fa-calendar-plus event-header-icon"></i>
+      <h2>Шинэ үйл явдал үүсгэх</h2>
+      <p class="text-muted">Хамт зугаатай үйл явдал зохион байгуулаарай</p>
+    </div>
+
+    <form action="/create-event" method="POST" class="event-form">
+      <div class="form-group">
+        <label for="event-name" class="event-label">
+          <i class="fas fa-tag"></i> Үйл явдлын нэр
+        </label>
+        <input
+          required
+          name="name"
+          id="event-name"
+          class="form-control form-control-lg event-input"
+          type="text"
+          placeholder="Жишээ нь: Уулын аялал, Кино үзэх, Кофе уух..."
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="event-location" class="event-label">
+          <i class="fas fa-map-marker-alt"></i> Хаана болох вэ?
+        </label>
+        <input
+          required
+          name="location"
+          id="event-location"
+          class="form-control form-control-lg event-input"
+          type="text"
+          placeholder="Байршил (Жишээ нь: Сүхбаатарын талбай, Zaisan Coffee...)"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="event-description" class="event-label">
+          <i class="fas fa-align-left"></i> Юу хийх вэ?
+        </label>
+        <textarea
+          required
+          name="description"
+          id="event-description"
+          class="form-control event-textarea"
+          placeholder="Үйл явдлын дэлгэрэнгүй мэдээлэл... (Юу хийх вэ? Юу авчрах вэ? Онцлох зүйл гэх мэт)"
+        ></textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="event-capacity" class="event-label">
+              <i class="fas fa-users"></i> Хэдэн хүн?
+            </label>
+            <input
+              required
+              name="capacity"
+              id="event-capacity"
+              class="form-control form-control-lg event-input"
+              type="number"
+              min="1"
+              max="1000"
+              placeholder="Хүмүүсийн тоо"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="event-date" class="event-label">
+              <i class="fas fa-clock"></i> Хэзээ?
+            </label>
+            <input
+              required
+              name="eventDate"
+              id="event-date"
+              class="form-control form-control-lg event-input"
+              type="datetime-local"
+            />
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-lg btn-success btn-block event-submit-btn">
+        <i class="fas fa-rocket"></i> Үйл явдал үүсгэх
+      </button>
+    </form>
+  </div>
+</div>
+
+<%- include('include/footer') %>

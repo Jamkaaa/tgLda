@@ -1,0 +1,122 @@
+<%- include('include/header') %>
+
+<div class="container py-md-5">
+  <%- include('include/flash') %>
+
+  <h2 class="text-center mb-4">
+    <i class="fas fa-user-friends"></i> Найзууд
+  </h2>
+
+  <!-- Pending Friend Requests -->
+  <% if (pendingRequests && pendingRequests.length > 0) { %>
+  <div class="card mb-4">
+    <div class="card-header bg-warning text-white">
+      <h4><i class="fas fa-bell"></i> Найзын хүсэлтүүд (<%= pendingRequests.length %>)</h4>
+    </div>
+    <div class="card-body">
+      <% pendingRequests.forEach(function(request) { %>
+      <div class="d-flex align-items-center justify-content-between mb-3 p-3 border rounded">
+        <div class="d-flex align-items-center">
+          <img src="<%= request.user.avatar %>" class="avatar-small mr-3" alt="<%= request.user.username %>">
+          <div>
+            <a href="/profile/<%= request.user.username %>" class="font-weight-bold">
+              <%= request.user.username %>
+            </a>
+            <p class="text-muted small mb-0">
+              <%= request.createdDate.toLocaleDateString() %>
+            </p>
+          </div>
+        </div>
+        <div>
+          <form action="/friend/accept/<%= request.requestId %>" method="POST" class="d-inline">
+            <button class="btn btn-success btn-sm">
+              <i class="fas fa-check"></i> Зөвшөөрөх
+            </button>
+          </form>
+          <form action="/friend/reject/<%= request.requestId %>" method="POST" class="d-inline">
+            <button class="btn btn-danger btn-sm">
+              <i class="fas fa-times"></i> Татгалзах
+            </button>
+          </form>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- Friends List -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h4><i class="fas fa-users"></i> Миний найзууд (<%= friends.length %>)</h4>
+    </div>
+    <div class="card-body">
+      <% if (friends && friends.length > 0) { %>
+        <div class="row">
+          <% friends.forEach(function(friend) { %>
+          <div class="col-md-4 col-sm-6 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <img src="<%= friend.avatar %>" class="rounded-circle mb-2" style="width: 80px; height: 80px; object-fit: cover;" alt="<%= friend.username %>">
+                <h5 class="card-title">
+                  <a href="/profile/<%= friend.username %>"><%= friend.username %></a>
+                </h5>
+                <p class="text-muted small">
+                  Найз болсон: <%= friend.acceptedDate.toLocaleDateString() %>
+                </p>
+                <div class="btn-group btn-group-sm" role="group">
+                  <a href="/profile/<%= friend.username %>" class="btn btn-info">
+                    <i class="fas fa-user"></i> Профайл
+                  </a>
+                  <button class="btn btn-success start-chat-btn" data-username="<%= friend.username %>" data-userid="<%= friend._id %>">
+                    <i class="fas fa-comment"></i> Чат
+                  </button>
+                  <form action="/friend/remove/<%= friend._id %>" method="POST" class="d-inline">
+                    <button class="btn btn-danger" onclick="return confirm('Найзаас хасах уу?')">
+                      <i class="fas fa-user-times"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-center text-muted">
+          <i class="fas fa-user-slash fa-3x mb-3"></i><br>
+          Та одоогоор найзгүй байна. Хэрэглэгчдийн профайл хандаж найз нэмээрэй!
+        </p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Sent Requests -->
+  <% if (sentRequests && sentRequests.length > 0) { %>
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">
+      <h4><i class="fas fa-paper-plane"></i> Илгээсэн хүсэлтүүд (<%= sentRequests.length %>)</h4>
+    </div>
+    <div class="card-body">
+      <% sentRequests.forEach(function(request) { %>
+      <div class="d-flex align-items-center justify-content-between mb-3 p-3 border rounded">
+        <div class="d-flex align-items-center">
+          <img src="<%= request.user.avatar %>" class="avatar-small mr-3" alt="<%= request.user.username %>">
+          <div>
+            <a href="/profile/<%= request.user.username %>" class="font-weight-bold">
+              <%= request.user.username %>
+            </a>
+            <p class="text-muted small mb-0">
+              Илгээсэн: <%= request.createdDate.toLocaleDateString() %>
+            </p>
+          </div>
+        </div>
+        <span class="badge badge-warning">Хүлээгдэж буй</span>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+<%- include('include/footer') %>

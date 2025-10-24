@@ -1,0 +1,113 @@
+<%- include('include/header') %>
+<!-- header ends here -->
+
+<div class="hero-section">
+  <div class="container py-5">
+    <%- include('include/flash') %>
+    
+    <div class="row align-items-center min-vh-80">
+      <!-- Left Side - Registration Form (Now comes first) -->
+      <div class="col-lg-5 order-lg-1 order-2 mb-5 mb-lg-0">
+        <div class="auth-card">
+          <div class="auth-card-header">
+            <h2 class="auth-title">Join TGLDA</h2>
+            <p class="auth-subtitle">Create your account and start connecting</p>
+          </div>
+          
+          <form action="/register" method="POST" id="registration-form">
+            <div class="form-group">
+              <label for="username-register" class="form-label"
+                ><i class="fas fa-user"></i> Username</label
+              >
+              <input
+                name="username"
+                id="username-register"
+                class="form-control modern-input"
+                type="text"
+                placeholder="Choose a unique username"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email-register" class="form-label"
+                ><i class="fas fa-envelope"></i> Email</label
+              >
+              <input
+                name="email"
+                id="email-register"
+                class="form-control modern-input"
+                type="text"
+                placeholder="your.email@example.com"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="password-register" class="form-label"
+                ><i class="fas fa-lock"></i> Password</label
+              >
+              <input
+                name="password"
+                id="password-register"
+                class="form-control modern-input"
+                type="password"
+                placeholder="Create a strong password"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-lg btn-success btn-block auth-btn mt-4"
+            >
+              <i class="fas fa-rocket"></i> Sign up for TGLDA
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Side - Welcome Message (Now comes second) -->
+      <div class="col-lg-7 order-lg-2 order-1 pl-lg-5">
+        <div class="welcome-content">
+          <div class="brand-logo-large">
+            <span class="brand-letter">T</span>
+            <span class="brand-letter">G</span>
+            <span class="brand-letter">L</span>
+            <span class="brand-letter">D</span>
+            <span class="brand-letter">A</span>
+          </div>
+          <h1 class="display-2 hero-title">Welcome to TGLDA</h1>
+          <p class="lead hero-subtitle">
+            <i class="fas fa-star"></i> Connect with friends and the world around you
+          </p>
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="fas fa-pen-fancy feature-icon"></i>
+              <div>
+                <h5>Express Yourself</h5>
+                <p>Share your thoughts, stories, and experiences with a vibrant community</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-users feature-icon"></i>
+              <div>
+                <h5>Build Connections</h5>
+                <p>Follow interesting people and grow your network organically</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-comments feature-icon"></i>
+              <div>
+                <h5>Real-Time Chat</h5>
+                <p>Engage in meaningful conversations with instant messaging</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- footer begins -->
+<%- include('include/footer') %>
