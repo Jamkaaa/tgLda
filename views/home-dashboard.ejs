@@ -4,13 +4,32 @@
 <div class="container py-md-5">
   <%- include('include/flash') %>
   
-  <div class="dashboard-welcome">
-    <h1 class="dashboard-title">
-      <i class="fas fa-fire"></i> Сайн уу, <span class="username-highlight"><%= user.username %></span>! 🎉
-    </h1>
-    <p class="dashboard-subtitle">
-      Шинэ үйл явдал үүсгэж, найз нөхдөө урьж эхлээрэй!
-    </p>
+  <!-- App Intro Hero Section -->
+  <div class="app-hero-intro">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-rocket"></i> Тавтай морил, <%= user.username %>!
+      </div>
+      <h1 class="hero-title">Холбогдох. Бүтээх. Тэмдэглэх.</h1>
+      <p class="hero-description">
+        Гайхалтай үйл явдлууд зохион байгуулж, найз нөхөдтэйгөө холбогдох нийгмийн төв. 
+        Мартагдашгүй дурсамж бүтээж, сонирхолтой үйл ажиллагаа олж, өөрийн хамт олноо бүтээгээрэй.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <i class="fas fa-calendar-check"></i>
+          <span class="stat-number">Үйл явдал</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-users"></i>
+          <span class="stat-number">Найзууд</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-bell"></i>
+          <span class="stat-number">Шууд</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="dashboard-quick-actions">
@@ -18,8 +37,8 @@
       <div class="quick-action-icon">
         <i class="fas fa-plus-circle"></i>
       </div>
-      <h3>Үйл явдал үүсгэх</h3>
-      <p>Шинэ үйл явдал зохион байгуулах</p>
+      <h3>Create event</h3>
+      <p>Organize a new event</p>
     </a>
     
     <a href="/events" class="quick-action-card">
@@ -27,7 +46,7 @@
         <i class="fas fa-calendar-alt"></i>
       </div>
   <h3>Event</h3>
-      <p>Үйл явдлуудыг үзэж нэгдэх</p>
+      <p>Browse and join events</p>
     </a>
     
     <a href="/profile/<%= user.username %>" class="quick-action-card">
@@ -73,13 +92,12 @@
         <i class="fas fa-calendar-alt"></i> Бүх үйл явдлыг үзэх
       </a>
     </div>
-    <% } else { %>
-    <div class="empty-dashboard">
-      <i class="fas fa-calendar-times"></i>
-      <h3>Үйл явдал байхгүй байна</h3>
-      <p>Анхны үйл явдлаа үүсгээд эхлээрэй!</p>
-    </div>
-    <% } %>
+      <% } else { %>
+  <div class="empty-state">
+    <i class="fas fa-calendar-times fa-5x text-muted mb-3"></i>
+    <h3>No events available</h3>
+  </div>
+  <% } %>
   </div>
 </div>
 

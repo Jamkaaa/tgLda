@@ -9,7 +9,7 @@ exports.createEvent = function (req, res) {
   event
     .create()
     .then(function (newId) {
-      req.flash("success", "Шинэ үйл явдал амжилттай үүсгэлээ!");
+      req.flash("success", "New event created successfully!");
       req.session.save(() => res.redirect(`/event/${newId}`));
     })
     .catch(function (errors) {
@@ -57,7 +57,7 @@ exports.edit = function (req, res) {
     .update()
     .then((status) => {
       if (status == "success") {
-        req.flash("success", "Үйл явдал амжилттай шинэчлэгдлээ.");
+        req.flash("success", "event successfully updated.");
         req.session.save(function () {
           res.redirect(`/event/${req.params.id}`);
         });
@@ -85,7 +85,7 @@ exports.edit = function (req, res) {
 exports.delete = function (req, res) {
   Event.delete(req.params.id, req.session.user._id)
     .then(() => {
-      req.flash("success", "Үйл явдал амжилттай устгагдлаа.");
+      req.flash("success", "event successfully deleted.");
       req.session.save(() =>
         res.redirect(`/profile/${req.session.user.username}`)
       );
@@ -118,7 +118,7 @@ exports.joinEvent = function (req, res) {
 
   Event.joinEvent(req.params.id, req.session.user._id)
     .then((result) => {
-      req.flash("success", "Та үйл явдалд амжилттай нэгдлээ!");
+      req.flash("success", "You have successfully joined the event!");
       
       // Send socket notification if event is full
       if (result.isFull) {
@@ -127,7 +127,7 @@ exports.joinEvent = function (req, res) {
         result.participants.forEach((participantId) => {
           io.emit("eventFull", {
             eventId: req.params.id,
-            message: "Үйл явдал дүүрсэн байна! Бэлэн болоорой!",
+            message: "event is full! Get ready!",
           });
         });
       }

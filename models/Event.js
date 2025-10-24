@@ -54,7 +54,7 @@ Event.prototype.validate = function () {
     this.errors.push("Үйл явдлын нэр оруулах шаардлагатай.");
   }
   if (this.data.location == "") {
-    this.errors.push("Үйл явдал болох газар оруулах шаардлагатай.");
+    this.errors.push("Event location is required.");
   }
   if (this.data.description == "") {
     this.errors.push("Үйл явдлын тайлбар оруулах шаардлагатай.");
@@ -266,7 +266,7 @@ Event.joinEvent = function (eventId, userId) {
 
       // Check if event is full
       if (event.isFull) {
-        reject("Үйл явдал дүүрсэн байна.");
+        reject("event is full.");
         return;
       }
 
@@ -303,7 +303,7 @@ Event.leaveEvent = function (eventId, userId) {
 
       // Check if user has joined
       if (!event.hasJoined) {
-        reject("Та энэ үйл явдалд нэгдээгүй байна.");
+        reject("You have not joined this event.");
         return;
       }
 

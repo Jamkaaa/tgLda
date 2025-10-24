@@ -103,12 +103,12 @@
         <% if (!event.isFull && !event.hasJoined) { %>
           <form action="/event/<%= event._id %>/join" method="POST" class="event-join-form">
             <button class="btn btn-success btn-lg btn-block event-join-large">
-              <i class="fas fa-user-plus"></i> Үйл явдалд нэгдэх
+              <i class="fas fa-user-plus"></i> Join event
             </button>
           </form>
         <% } else if (event.hasJoined) { %>
           <div class="alert alert-info">
-            <i class="fas fa-check-circle"></i> Та энэ үйл явдалд нэгдсэн байна!
+            <i class="fas fa-check-circle"></i> You have joined this event!
           </div>
           <form action="/event/<%= event._id %>/leave" method="POST">
             <button class="btn btn-outline-danger btn-lg">
@@ -117,7 +117,7 @@
           </form>
         <% } else if (event.isFull) { %>
           <div class="alert alert-warning">
-            <i class="fas fa-exclamation-triangle"></i> Энэ үйл явдал дүүрсэн байна
+            <i class="fas fa-exclamation-triangle"></i> This event is full
           </div>
         <% } %>
       <% } %>
